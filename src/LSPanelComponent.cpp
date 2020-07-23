@@ -1,13 +1,13 @@
-#include "MainComponent.h"
+#include "LSPanelComponent.h"
 
 //==============================================================================
-MainComponent::MainComponent()
+LSPanelComponent::LSPanelComponent()
 {
     setSize (600, 400);
 }
 
 //==============================================================================
-void MainComponent::paint (juce::Graphics& g)
+void LSPanelComponent::paint (juce::Graphics& g)
 {
     // (Our component is opaque, so we must completely fill the background with a solid colour)
     g.fillAll (getLookAndFeel().findColour (juce::ResizableWindow::backgroundColourId));
@@ -17,9 +17,9 @@ void MainComponent::paint (juce::Graphics& g)
     g.drawText ("Hello World!", getLocalBounds(), juce::Justification::centred, true);
 }
 
-void MainComponent::resized()
+void LSPanelComponent::resized()
 {
-    // This is called when the MainComponent is resized.
+    // This is called when the LSPanelComponent is resized.
     // If you add any child components, this is where you should
     // update their positions.
 }

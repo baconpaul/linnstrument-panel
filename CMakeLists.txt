@@ -30,8 +30,6 @@ juce_add_gui_app(linnstrument-panel
     NEEDS_MIDI_INPUT TRUE
     NEEDS_MIDI_OUTPUT TRUE
     IS_MIDI_EFFECT FALSE
-    
-    FORMATS Standalone
 )
 
 juce_generate_juce_header( linnstrument-panel )
@@ -56,12 +54,14 @@ target_include_directories(linnstrument-panel
 )
 
 configure_file(
-  ${CMAKE_SOURCE_DIR}/Source/version.cpp.in
+  ${CMAKE_SOURCE_DIR}/src/version.cpp.in
   ${CMAKE_BINARY_DIR}/generated/version.cpp
 )
 
 target_sources(linnstrument-panel PRIVATE
   ${CMAKE_BINARY_DIR}/generated/version.cpp
+  src/LSPanelComponent.cpp
+  src/LSPanelMain.cpp
 )
 
 target_compile_definitions(linnstrument-panel PUBLIC
@@ -72,6 +72,9 @@ target_compile_definitions(linnstrument-panel PUBLIC
     JUCE_USE_CURL=0
     JUCE_WEB_BROWSER=0
 
+    JUCE_APPLICATION_NAME_STRING="$<TARGET_PROPERTY:linnstrument-panel,JUCE_PROJECT_NAME>"
+    JUCE_APPLICATION_VERSION_STRING="$<TARGET_PROPERTY:linnstrument-panel,JUCE_PROJECT_VERSION>"
+    
     JUCE_DISPLAY_SPLASH_SCREEN=0
     JUCE_REPORT_APP_USAGE=0
 
@@ -94,12 +97,12 @@ get_target_property( OUTPUT_DIR linnstrument-panel RUNTIME_OUTPUT_DIRECTORY )
 add_custom_target( well-named-assets )
 
 add_custom_target( well-named-standalone )
-add_dependencies( well-named-standalone linnstrument-panel_Standalone )
+add_dependencies( well-named-standalone linnstrument-panel )
 add_dependencies( well-named-assets well-named-standalone )
 
 add_custom_target( installer-pkg )
 add_dependencies( installer-pkg well-named-assets )
-add_dependencies( installer-pkg linnstrument-panel_Standalone )
+add_dependencies( installer-pkg linnstrument-panel )
 
 set( INSTALLER_DIR ${CMAKE_BINARY_DIR}/asset )
 set( WELL_NAMED_ASSET_DIR ${CMAKE_BINARY_DIR}/product )
@@ -110,7 +113,8 @@ add_custom_command(
   POST_BUILD
   WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
   COMMAND ${CMAKE_COMMAND} -E make_directory  ${WELL_NAMED_ASSET_DIR}
-  COMMAND ${CMAKE_COMMAND} -E copy_directory ${OUTPUT_DIR}/Standalone ${WELL_NAMED_ASSET_DIR}
+  COMMAND ${CMAKE_COMMAND} -E copy_directory ${OUTPUT_DIR} ${WELL_NAMED_ASSET_DIR}
+  COMMAND ${CMAKE_COMMAND} -E remove_directory ${WELL_NAMED_ASSET_DIR}/JuceLibraryCode
   )
 
 

@@ -1,4 +1,4 @@
-#include "MainComponent.h"
+#include "LSPanelComponent.h"
 
 //==============================================================================
 class GuiAppApplication  : public juce::JUCEApplication
@@ -20,7 +20,7 @@ public:
         // This method is where you should put your application's initialisation code..
         juce::ignoreUnused (commandLine);
 
-        mainWindow.reset (new MainWindow (getApplicationName()));
+        mainWindow.reset (new LSPanelWindow (getApplicationName()));
     }
 
     void shutdown() override
@@ -51,17 +51,17 @@ public:
         This class implements the desktop window that contains an instance of
         our MainComponent class.
     */
-    class MainWindow    : public juce::DocumentWindow
+    class LSPanelWindow    : public juce::DocumentWindow
     {
     public:
-        explicit MainWindow (juce::String name)
+        explicit LSPanelWindow (juce::String name)
             : DocumentWindow (name,
                               juce::Desktop::getInstance().getDefaultLookAndFeel()
                                                           .findColour (ResizableWindow::backgroundColourId),
                               DocumentWindow::allButtons)
         {
             setUsingNativeTitleBar (true);
-            setContentOwned (new MainComponent(), true);
+            setContentOwned (new LSPanelComponent(), true);
 
            #if JUCE_IOS || JUCE_ANDROID
             setFullScreen (true);
@@ -89,11 +89,11 @@ public:
         */
 
     private:
-        JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (MainWindow)
+        JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (LSPanelWindow)
     };
 
 private:
-    std::unique_ptr<MainWindow> mainWindow;
+    std::unique_ptr<LSPanelWindow> mainWindow;
 };
 
 //==============================================================================
