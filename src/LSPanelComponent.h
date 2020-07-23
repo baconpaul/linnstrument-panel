@@ -1,10 +1,6 @@
 #pragma once
 
-// CMake builds don't use an AppConfig.h, so it's safe to include juce module headers
-// directly. If you need to remain compatible with Projucer-generated builds, and
-// have called `juce_generate_juce_header(<thisTarget>)` in your CMakeLists.txt,
-// you could `#include <JuceHeader.h>` here instead, to make all your module headers visible.
-#include <juce_gui_extra/juce_gui_extra.h>
+#include <JuceHeader.h>
 
 //==============================================================================
 /*
@@ -16,14 +12,24 @@ class LSPanelComponent   : public juce::Component
 public:
     //==============================================================================
     LSPanelComponent();
+    ~LSPanelComponent();
 
     //==============================================================================
     void paint (juce::Graphics&) override;
     void resized() override;
 
+    std::unique_ptr<juce::MidiOutput> linnout;
+
+    class FlipCellTimer : public juce::Timer
+    {
+    public:
+        FlipCellTimer( LSPanelComponent *pc ) : parent(pc) { }
+        virtual void timerCallback() override;
+        LSPanelComponent *parent;
+    };
+    std::unique_ptr<FlipCellTimer> linTimer;
+    
 private:
-    //==============================================================================
-    // Your private member variables go here...
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (LSPanelComponent)
 };

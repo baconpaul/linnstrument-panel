@@ -85,6 +85,7 @@ target_compile_definitions(linnstrument-panel PUBLIC
 target_link_libraries(linnstrument-panel PRIVATE
     linnstrument-panel-binary
     juce::juce_analytics
+    juce::juce_audio_devices
     juce::juce_audio_utils
     juce::juce_audio_processors
     juce::juce_blocks_basics
